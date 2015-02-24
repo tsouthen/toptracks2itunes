@@ -17,6 +17,7 @@ namespace TopTracks2iTunes
     public partial class Form1 : Form
     {
         private iTunesApp m_itunes = null;
+        private TopTrackCache m_cache = null;
 
         public Form1()
         {
@@ -185,6 +186,110 @@ namespace TopTracks2iTunes
             {
                 this.messagesTextBox.AppendText("Exception: " + ex.Message);
             }
+        }
+
+        private async Task SetTopTracksComment(IITPlaylist playlist, IProgress<ProgressItem> progress, CancellationToken ct)
+        {
+            try
+            {
+                int idx = 0;
+                string fileName = @"%temp%\TopTracks2iTunes.json";
+                fileName = System.Environment.ExpandEnvironmentVariables(fileName);
+                if (m_cache == null)
+                    m_cache = TopTrackCache.Deserialize(fileName);
+
+                foreach (IITTrack track in playlist.Tracks)
+                {
+                    if (ct.IsCancellationRequested)
+                        break;
+
+                    //only work with files, and only worry about ones where we have Artist, Name and not 
+                    //already tagged as Top
+                    bool nullComment = string.IsNullOrEmpty(track.Comment);
+                    IITFileOrCDTrack currTrack = track as IITFileOrCDTrack;
+                    if (currTrack != null && currTrack.Kind == ITTrackKind.ITTrackKindFile &&
+                        !string.IsNullOrEmpty(currTrack.Name) && !string.IsNullOrEmpty(currTrack.Artist) &&
+                        (nullComment || (!nullComment && !currTrack.Comment.Contains("Top:"))))
+                    {
+                        progress.Report(new ProgressItem() { Text = currTrack.Name, Value = idx + 1 });
+                        var topTrack = await m_cache.GetTopTrack(currTrack.Artist, currTrack.Name);
+                        if (topTrack != null && topTrack.Rank != 0 && topTrack.Rank <= 20)
+                        {
+                            int top = CeilingToNearest5(topTrack.Rank);
+                            int playPercent = RoundToNearest5(topTrack.PlayCountPercent);
+                            currTrack.Comment = string.Format("Top:{0:00},Rank:{1:00},PlayCount:{2:00}", top, topTrack.Rank, playPercent);
+                        }
+                    }
+                    idx++;
+                }
+
+                m_cache.Serialize(fileName);
+            }
+            catch (Exception ex)
+            {
+                this.messagesTextBox.AppendText("Exception: " + ex.Message);
+            }
+        }
+
+        private static int Round(int number, int rounding)
+        {
+            double numToRound = (double)number / (double)rounding;
+            return (int)Math.Round(numToRound) * rounding;
+        }
+
+        private static int RoundToNearest5(int number)
+        {
+            return Round(number, 5);
+        }
+
+        private static int Ceiling(int number, int ceiling)
+        {
+            double numToCeiling = (double)number / (double)ceiling;
+            return (int)Math.Ceiling(numToCeiling) * ceiling;
+        }
+
+        private static int CeilingToNearest5(int number)
+        {
+            return Ceiling(number, 5);
+        }
+
+        private async void setTopTracksButton_Click(object sender, EventArgs e)
+        {
+            if (this.progressBar.Visible)
+            {
+                if (this.Cancel.IsCancellationRequested)
+                    return;
+                this.Cancel.Cancel();
+                return;
+            }
+            IITPlaylist playList = this.playlistComboBox.SelectedItem as IITPlaylist;
+            if (playList == null)
+                return;
+
+            int numTracks = playList.Tracks.Count;
+            int count = 0;
+            this.messagesTextBox.Clear();
+            this.messagesTextBox.AppendText(string.Format("Processing {0} tracks...\r\n", App.LibraryPlaylist.Tracks.Count));
+
+            Progress<ProgressItem> progress = new Progress<ProgressItem>(item =>
+            {
+                this.messagesTextBox.AppendText(string.Format("Setting top track comment for {0}\r\n", item.Text));
+                int prog = (100 * item.Value) / numTracks;
+                this.progressBar.Value = prog;
+                count++;
+            });
+
+
+            this.progressBar.Visible = true;
+            string text = this.setTopTracksButton.Text;
+            this.setTopTracksButton.Text = "Stop";
+            this.Cancel = new CancellationTokenSource();
+
+            await SetTopTracksComment(playList, progress, this.Cancel.Token);
+
+            this.messagesTextBox.AppendText(string.Format("Set comments for {0} tracks\r\n", count));
+            this.progressBar.Visible = false;
+            this.setTopTracksButton.Text = text;
         }
     }
 }

@@ -38,6 +38,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.playlistComboBox = new System.Windows.Forms.ComboBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.setTopTracksButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackLimit)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,19 +49,19 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.messagesTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.messagesTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.messagesTextBox.Location = new System.Drawing.Point(10, 98);
+            this.messagesTextBox.Location = new System.Drawing.Point(10, 68);
             this.messagesTextBox.Multiline = true;
             this.messagesTextBox.Name = "messagesTextBox";
             this.messagesTextBox.ReadOnly = true;
             this.messagesTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.messagesTextBox.Size = new System.Drawing.Size(422, 359);
+            this.messagesTextBox.Size = new System.Drawing.Size(562, 395);
             this.messagesTextBox.TabIndex = 0;
             // 
             // clearCommentsButton
             // 
-            this.clearCommentsButton.Location = new System.Drawing.Point(15, 39);
+            this.clearCommentsButton.Location = new System.Drawing.Point(218, 12);
             this.clearCommentsButton.Name = "clearCommentsButton";
-            this.clearCommentsButton.Size = new System.Drawing.Size(75, 42);
+            this.clearCommentsButton.Size = new System.Drawing.Size(98, 21);
             this.clearCommentsButton.TabIndex = 1;
             this.clearCommentsButton.Text = "Clear Comments";
             this.clearCommentsButton.UseVisualStyleBackColor = true;
@@ -68,34 +69,37 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(360, 39);
+            this.button2.Location = new System.Drawing.Point(538, 261);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 53);
             this.button2.TabIndex = 3;
             this.button2.Text = "Get Top Tracks";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Visible = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // artistTextBox
             // 
-            this.artistTextBox.Location = new System.Drawing.Point(254, 39);
+            this.artistTextBox.Location = new System.Drawing.Point(432, 261);
             this.artistTextBox.Name = "artistTextBox";
             this.artistTextBox.Size = new System.Drawing.Size(100, 20);
             this.artistTextBox.TabIndex = 4;
             this.artistTextBox.Text = "Brian Adam";
+            this.artistTextBox.Visible = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(213, 42);
+            this.label1.Location = new System.Drawing.Point(391, 264);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 5;
             this.label1.Text = "Artist:";
+            this.label1.Visible = false;
             // 
             // trackLimit
             // 
-            this.trackLimit.Location = new System.Drawing.Point(254, 66);
+            this.trackLimit.Location = new System.Drawing.Point(432, 288);
             this.trackLimit.Minimum = new decimal(new int[] {
             1,
             0,
@@ -109,15 +113,17 @@
             0,
             0,
             0});
+            this.trackLimit.Visible = false;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(213, 68);
+            this.label2.Location = new System.Drawing.Point(391, 290);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(31, 13);
             this.label2.TabIndex = 7;
             this.label2.Text = "Limit:";
+            this.label2.Visible = false;
             // 
             // label3
             // 
@@ -141,17 +147,28 @@
             // 
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(206, 12);
+            this.progressBar.Location = new System.Drawing.Point(10, 39);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(229, 23);
+            this.progressBar.Size = new System.Drawing.Size(562, 23);
             this.progressBar.TabIndex = 10;
             this.progressBar.Visible = false;
+            // 
+            // setTopTracksButton
+            // 
+            this.setTopTracksButton.Location = new System.Drawing.Point(324, 12);
+            this.setTopTracksButton.Name = "setTopTracksButton";
+            this.setTopTracksButton.Size = new System.Drawing.Size(98, 21);
+            this.setTopTracksButton.TabIndex = 11;
+            this.setTopTracksButton.Text = "Set Top Tracks";
+            this.setTopTracksButton.UseVisualStyleBackColor = true;
+            this.setTopTracksButton.Click += new System.EventHandler(this.setTopTracksButton_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(446, 469);
+            this.ClientSize = new System.Drawing.Size(586, 475);
+            this.Controls.Add(this.setTopTracksButton);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.playlistComboBox);
             this.Controls.Add(this.label3);
@@ -182,6 +199,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox playlistComboBox;
         private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.Button setTopTracksButton;
     }
 }
 

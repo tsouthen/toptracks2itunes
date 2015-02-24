@@ -14,7 +14,8 @@ namespace TopTracks2iTunes
         public int Rank;
         public string Name;
         //public string Mbid;
-        //public int PlayCount;
+        public int PlayCount;
+        public int PlayCountPercent;
         //public int Listeners;
         //public string Url;
     }
@@ -57,8 +58,8 @@ namespace TopTracks2iTunes
                                 Rank = int.Parse(item.Attribute("rank").Value),
                                 Name = (string)item.Element("name"),
                                 //Mbid = (string)item.Element("mbid"),
-                                //PlayCount = int.Parse((string)item.Attribute("playcount")),
-                                //Listeners = int.Parse((string)item.Attribute("listeners")),
+                                PlayCount = int.Parse(item.Element("playcount").Value),
+                                //Listeners = int.Parse(item.Attribute("listeners").Value),
                                 //Url = (string)item.Element("url"),
                             };
                 return query;
